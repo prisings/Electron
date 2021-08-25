@@ -1,6 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow , ipcMain} = require('electron')
 const path = require('path')
+var fs = require('fs');
+var fse = require('fs-extra');
+var crypto = require('crypto');
+
 
 function createWindow () {
   // Create the browser window.
@@ -8,6 +12,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
       preload: path.join(__dirname, 'preload.js')
     }
   })
@@ -31,6 +37,29 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
+
+ipcMain.on('mkdir', (event,arg) => {
+    console.log(arg)
+    var sourceDir = 'C:\\WebInstaller';
+    var destDir = 'D:\\Jeong\\TestCopy';
+    // if folder doesn't exists create it
+    if (!fs.existsSync(destDir)){
+        fs.mkdirSync(destDir, { recursive: false });
+        return console.log("nothing");
+    }
+    //copy directory content including subfolders
+    fse.copy(sourceDir, destDir, function (err) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("success!");
+        event.sender.send('mkdir','mkdir')
+     }
+    }); 
+})
+/* app.post('/mkdir',function(){
+   res.redirect("/");
+}) */
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
