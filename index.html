@@ -9,10 +9,15 @@
   </head>
   <body>
     회계프로그램 포렌식 연습
+    <input type="checkbox" class="copyPath" id="kakao" value="C:\\kakao" />kakao
+    <input type="checkbox" class="copyPath" id="itunes" value="C:\\itunes" />itunes
+    <input type="checkbox" class="copyPath" id="android" value="C:\\android" />android
+    <input type="checkbox" class="copyPath" id="account" value="C:\\webinstaller" />account
+
     <button id="btnEd" >테스트</button>
     <script src="./renderer.js"></script>
     <!-- You can also require other files to run in this process -->
-    기록 : 카피후 해쉬값도같고 기록도 같지만 모듈을 사용해서 만들어야함 간단한 fs나 해시확인으로는
-    한계가 있음
+    기록 : 해쉬값이 같고 파일명이 달라져도 해쉬값은 같다 
+           해쉬값이 변경되는경우는 내부 파일데이터가 달라지는 경우인것 같다.
   </body>
 </html>

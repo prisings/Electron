@@ -38,14 +38,13 @@ app.whenReady().then(() => {
   })
 })
 
-ipcMain.on('mkdir', (event,arg) => {
-    console.log(arg)
-    var sourceDir = 'C:\\WebInstaller';
-    var destDir = 'D:\\Jeong\\TestCopy';
+ipcMain.on('mkdir', (event,path) => {
+    var sourceDir = path
+    var dirName = path.substring(path.lastIndexOf("\\"));
+     var destDir = 'D:\Jeong\TestCopy' + dirName;
     // if folder doesn't exists create it
     if (!fs.existsSync(destDir)){
-        fs.mkdirSync(destDir, { recursive: false });
-        return console.log("nothing");
+        fs.mkdirSync(destDir, { recursive: true });
     }
     //copy directory content including subfolders
     fse.copy(sourceDir, destDir, function (err) {
@@ -55,7 +54,7 @@ ipcMain.on('mkdir', (event,arg) => {
         console.log("success!");
         event.sender.send('mkdir','mkdir')
      }
-    }); 
+    });  
 })
 /* app.post('/mkdir',function(){
    res.redirect("/");
