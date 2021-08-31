@@ -3,8 +3,7 @@ const {app, BrowserWindow , ipcMain} = require('electron')
 const path = require('path')
 var fs = require('fs');
 var fse = require('fs-extra');
-var crypto = require('crypto');
-
+var empty =  require('is-empty');
 
 function createWindow () {
   // Create the browser window.
@@ -41,20 +40,31 @@ app.whenReady().then(() => {
 ipcMain.on('mkdir', (event,path) => {
     var sourceDir = path
     var dirName = path.substring(path.lastIndexOf("\\"));
-     var destDir = 'D:\Jeong\TestCopy' + dirName;
+    var destDir = 'D:\\Jeong\\TestCopy' + dirName;
     // if folder doesn't exists create it
-    if (!fs.existsSync(destDir)){
+    //폴더 내부에 파일 List 넣기
+    var sourceFileList = fs.readdirSync(sourceDir)
+    /* var destFileList */
+
+    //List 가 비어있으면 미실행
+    if(!empty(sourceFileList)){
+      if (!fs.existsSync(destDir)){
         fs.mkdirSync(destDir, { recursive: true });
+      }
+      //copy directory content including subfolders
+      fse.copy(sourceDir, destDir, function (err) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("success!");
+          event.sender.send('mkdir','mkdir')
+        }
+      });  
+    }else{
+      console.log("No File")
     }
-    //copy directory content including subfolders
-    fse.copy(sourceDir, destDir, function (err) {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log("success!");
-        event.sender.send('mkdir','mkdir')
-     }
-    });  
+      
+      
 })
 /* app.post('/mkdir',function(){
    res.redirect("/");
