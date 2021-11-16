@@ -69,6 +69,8 @@ ipcMain.on('mkdir', (event,path) => {
 /* app.post('/mkdir',function(){
    res.redirect("/");
 }) */
+//IPC 통신 학습 준비
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
